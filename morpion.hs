@@ -16,7 +16,7 @@ doEnd grid = putStr(gridToString grid)
 play :: Int -> [[Int]] -> IO ()
 play numTurn grid | isOver grid = doEnd grid
                   | null(getEmptyCells grid) = putStrLn "Aucune case jouable"
-                  | otherwise = (update grid numTurn) >>= play (numTurn+1)
+                  | otherwise = (updateByPlaying grid numTurn) >>= play (numTurn+1)
 
 getEmptyCells :: [[Int]] -> [(Int, Int)]
 getEmptyCells grid = [ (l,c) | l<-indexesOf grid, c<-indexesOf grid, getFrom grid l c == 0]
@@ -59,9 +59,6 @@ updateByPlaying grid numPlayer = do
     putStr(gridToString grid)
     cell <- askCell
     return (playOnCell grid cell ((numPlayer `mod` 2)+1))
-
-update :: [[Int]] -> Int -> IO [[Int]]
-update grid numPlayer = updateByPlaying grid numPlayer
     
 playOnCell :: [[Int]] -> (Int,Int) -> Int -> [[Int]]
 playOnCell grid (l,c) = update2DList grid l c
